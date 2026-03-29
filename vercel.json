@@ -1,5 +1,4 @@
 {
-  "alias": ["spanischunterricht-volksdorf.de"],
   "rewrites": [
     { "source": "/admin", "destination": "/admin/index.html" }
   ]
