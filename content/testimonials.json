@@ -1,0 +1,7 @@
+{
+  "testimonios": [
+    { "texto": "Alicia ist eine wunderbare Lehrerin. Ich lerne Spanisch seit einem Jahr bei ihr und merke jeden Monat, wie viel besser ich werde.", "autor": "Maria K.", "ciudad": "Volksdorf" },
+    { "texto": "Nach 10 Stunden Einzelunterricht habe ich mich auf meiner Reise nach Peru wirklich verständigen können.", "autor": "Thomas B.", "ciudad": "Meiendorf" },
+    { "texto": "Der Konversationskurs ist genau richtig für mich. Ich hatte Grundkenntnisse, aber traute mich nicht zu sprechen. Jetzt ist das ganz anders.", "autor": "Sandra H.", "ciudad": "Bergstedt" }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "cursos": [
+    { "numero": "01", "badge": "Online & vor Ort", "titulo": "Einzelunterricht", "descripcion": "100% auf Ihre Bedürfnisse zugeschnitten. Tempo, Inhalt und Methoden richten sich nach Ihnen.", "featured": true },
+    { "numero": "02", "badge": "Online & vor Ort", "titulo": "Gruppenkurse", "descripcion": "Für Erwachsene und Schüler in kleinen Gruppen. In angenehmer Atmosphäre lernt es sich leichter.", "featured": false },
+    { "numero": "03", "badge": "Online & vor Ort", "titulo": "Konversation", "descripcion": "Für alle mit Grundkenntnissen. Sprechen üben, Kenntnisse auffrischen, sicherer werden.", "featured": false },
+    { "numero": "04", "badge": "Literatur & Kultur", "titulo": "Literatur", "descripcion": "Spanische und lateinamerikanische Literatur — Sprache durch authentische Texte vertiefen.", "featured": false },
+    { "numero": "05", "badge": "Prüfung", "titulo": "DELE Vorbereitung", "descripcion": "Gezielte Vorbereitung auf das offizielle Spanisch-Zertifikat des Instituto Cervantes.", "featured": false },
+    { "numero": "06", "badge": "Alle Niveaus", "titulo": "Urlaubsspanisch", "descripcion": "Kompaktkurs für die nächste Reise — die wichtigsten Sätze und Situationen in kurzer Zeit.", "featured": false }
+  ]
+}

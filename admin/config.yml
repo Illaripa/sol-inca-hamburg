@@ -1,0 +1,104 @@
+backend:
+  name: github
+  repo: TU_USUARIO_GITHUB/landing-test   # ← cambiar esto
+  branch: main
+  base_url: https://landing-test-lemon.vercel.app
+  auth_endpoint: /api/auth
+
+media_folder: public/uploads
+public_folder: /uploads
+
+locale: de
+
+collections:
+  - name: pagina
+    label: Página
+    files:
+
+      - name: hero
+        label: Hero (sección principal)
+        file: content/hero.json
+        fields:
+          - { label: Título línea 1, name: title1, widget: string, default: "Spanisch lernen —" }
+          - { label: Título en cursiva (dorado), name: title_italic, widget: string, default: "mit Qualifikation und Herz" }
+          - { label: Subtítulo, name: subtitle, widget: text }
+          - { label: Badge 1, name: badge1, widget: string, default: "Muttersprachlerin" }
+          - { label: Badge 2, name: badge2, widget: string, default: "Staatsexamen" }
+          - { label: Badge 3, name: badge3, widget: string, default: "Hamburg Nordost" }
+          - { label: Botón principal (texto), name: cta_primary, widget: string, default: "Kostenlos anfragen" }
+          - { label: Botón secundario (texto), name: cta_secondary, widget: string, default: "Kurse entdecken" }
+
+      - name: sobre_mi
+        label: Sobre mí
+        file: content/sobre-mi.json
+        fields:
+          - { label: Foto, name: foto, widget: image }
+          - { label: Cita, name: quote, widget: text }
+          - { label: Párrafo 1, name: parrafo1, widget: text }
+          - { label: Párrafo 2, name: parrafo2, widget: text }
+          - { label: Dato 1 — número, name: fact1_num, widget: string, default: "Staatsx." }
+          - { label: Dato 1 — etiqueta, name: fact1_label, widget: string, default: "Spanisch & Pädagogik" }
+          - { label: Dato 2 — número, name: fact2_num, widget: string, default: "A1–C1" }
+          - { label: Dato 2 — etiqueta, name: fact2_label, widget: string, default: "Alle Niveaus" }
+          - { label: Dato 3 — número, name: fact3_num, widget: string, default: "60 Min" }
+          - { label: Dato 3 — etiqueta, name: fact3_label, widget: string, default: "pro Stunde" }
+
+      - name: kurse
+        label: Cursos
+        file: content/kurse.json
+        fields:
+          - name: cursos
+            label: Lista de cursos
+            widget: list
+            fields:
+              - { label: Número, name: numero, widget: string }
+              - { label: Badge, name: badge, widget: string }
+              - { label: Título, name: titulo, widget: string }
+              - { label: Descripción, name: descripcion, widget: text }
+              - { label: Destacado (primer card), name: featured, widget: boolean, default: false }
+
+      - name: testimonials
+        label: Testimonios
+        file: content/testimonials.json
+        fields:
+          - name: testimonios
+            label: Lista de testimonios
+            widget: list
+            fields:
+              - { label: Texto, name: texto, widget: text }
+              - { label: Autor, name: autor, widget: string }
+              - { label: Ciudad, name: ciudad, widget: string }
+
+      - name: preise
+        label: Precios
+        file: content/preise.json
+        fields:
+          - { label: Título, name: titulo, widget: string }
+          - { label: Descripción, name: descripcion, widget: text }
+          - name: lista
+            label: Lista de puntos
+            widget: list
+            field: { label: Punto, name: punto, widget: string }
+
+      - name: contacto
+        label: Contacto
+        file: content/contacto.json
+        fields:
+          - { label: Teléfono, name: telefono, widget: string }
+          - { label: Email, name: email, widget: string }
+          - { label: Dirección línea 1, name: direccion1, widget: string }
+          - { label: Dirección línea 2, name: direccion2, widget: string }
+
+      - name: footer
+        label: Footer
+        file: content/footer.json
+        fields:
+          - { label: Texto del footer, name: texto, widget: string }
+
+      - name: whatsapp
+        label: WhatsApp
+        file: content/whatsapp.json
+        fields:
+          - { label: Número (sin + ni espacios), name: numero, widget: string }
+          - { label: Mensaje pre-escrito, name: mensaje, widget: string }
+          - { label: Texto burbuja, name: burbuja, widget: string }

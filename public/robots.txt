@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://landing-test-lemon.vercel.app/sitemap.xml
