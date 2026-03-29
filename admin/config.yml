@@ -2,7 +2,7 @@ backend:
   name: github
   repo: Illaripa/sol-inca-hamburg
   branch: main
-  base_url: https://landing-test-lemon.vercel.app
+  base_url: https://spanischunterricht-volksdorf.de
   auth_endpoint: /api/auth
 
 media_folder: public/uploads
