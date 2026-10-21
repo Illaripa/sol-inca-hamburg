@@ -1,0 +1,77 @@
+name: 🛡️ Security Guardian
+
+# Detecta en cada push/PR: secrets filtrados + los IOCs del ataque de oct-2026
+# (workflow exfiltrador, tasks.json autorun, fa-solid woff2-payload, IP C2).
+# Si encuentra algo, FALLA el check → GitHub te notifica por email al instante.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  guardian:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detectar IOCs del malware
+        shell: bash
+        run: |
+          set +e
+          FAIL=0
+          echo "::group::Chequeo de indicadores de compromiso"
+
+          # 1) .vscode/tasks.json con autorun (folderOpen) o ejecutando un asset
+          if [ -f .vscode/tasks.json ] && grep -qiE 'folderOpen|\.woff2|child_process|node \./' .vscode/tasks.json; then
+            echo "::error file=.vscode/tasks.json::tasks.json con autorun sospechoso (vector del ataque oct-2026)"; FAIL=1
+          fi
+
+          # 2) fa-solid-400.woff2 que NO sea una fuente real (payload JS disfrazado)
+          while IFS= read -r f; do
+            if [ -n "$f" ] && ! head -c4 "$f" 2>/dev/null | grep -q 'wOF2'; then
+              echo "::error file=$f::'$f' no es una fuente woff2 real (posible payload)"; FAIL=1
+            fi
+          done < <(find . -name 'fa-solid-400.woff2' -not -path './node_modules/*' 2>/dev/null)
+
+          # 3) IP C2 conocida o patrón de exfiltración (curl POST a una IP cruda)
+          # (se excluye a sí mismo y la doc del incidente para no auto-detectarse)
+          C2="193.32.204"".199"
+          if grep -rIF "$C2" . --exclude-dir=node_modules --exclude-dir=.git --exclude=security-guardian.yml 2>/dev/null | grep -vi 'ESTADO.md'; then
+            echo "::error::IP del atacante presente en el repo"; FAIL=1
+          fi
+          if grep -rIlE 'curl[^|]*-X *POST[^|]*http://[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' . --include=*.yml --include=*.yaml --include=*.js --include=*.sh --exclude-dir=node_modules --exclude-dir=.git --exclude=security-guardian.yml 2>/dev/null; then
+            echo "::error::patrón de exfiltración (curl POST a IP cruda) detectado"; FAIL=1
+          fi
+
+          # 4) workflows que leen secrets de TODO el historial y los mandan afuera
+          if grep -rIlE 'git log -p --all|grep -r.*(AKIA|sk-ant-|ghp_)' .github/workflows --exclude=security-guardian.yml 2>/dev/null; then
+            echo "::error::workflow que rastrea secrets en el historial (comportamiento malicioso)"; FAIL=1
+          fi
+          echo "::endgroup::"
+          [ "$FAIL" = "0" ] && echo "✅ Sin IOCs del malware" || { echo "❌ IOCs detectados"; exit 1; }
+
+      - name: Instalar y correr gitleaks (secrets que ENTRAN en este push)
+        shell: bash
+        env:
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+        run: |
+          set -e
+          V=8.30.1
+          curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v${V}/gitleaks_${V}_linux_x64.tar.gz" -o /tmp/gl.tgz
+          tar -xzf /tmp/gl.tgz -C /tmp gitleaks
+          RANGE=""
+          if [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then
+            RANGE="--log-opts=$BEFORE..$AFTER"
+          fi
+          echo "::group::gitleaks (rango del push: ${RANGE:-todo})"
+          /tmp/gitleaks git . $RANGE --no-banner --redact=80 --exit-code 1 \
+            || { echo "::error::🔑 gitleaks detectó un secret que entra en este push — revísalo"; exit 1; }
+          echo "::endgroup::"
+          echo "✅ Sin secrets nuevos detectados por gitleaks"
